@@ -33,8 +33,11 @@ import { BrowserProvider, Contract, parseEther, formatEther, type ContractTransa
  * Deployed contract address on Monad.
  * Change this if you redeploy the contract.
  */
-export const MONAD_WALLET_REPORT_ADDRESS: string =
+const DEFAULT_MONAD_WALLET_REPORT_ADDRESS =
   "0x316Cea81C4D8BBbB9cfF2D432d90CB5d4dc4D6b1";
+
+export const MONAD_WALLET_REPORT_ADDRESS: string =
+  import.meta.env.VITE_CONTRACT_ADDRESS || DEFAULT_MONAD_WALLET_REPORT_ADDRESS;
 
 /** Default price to generate a report (matches the contract's initial value). */
 export const REPORT_PRICE_MON = "1";
@@ -68,7 +71,7 @@ function assertConfigured() {
     MONAD_WALLET_REPORT_ADDRESS === "0x0000000000000000000000000000000000000000"
   ) {
     throw new Error(
-      "MonadWalletReport contract address is not configured. Set MONAD_WALLET_REPORT_ADDRESS in src/lib/contract.ts"
+      "MonadWalletReport contract address is not configured. Set VITE_CONTRACT_ADDRESS in your environment variables"
     );
   }
 }
