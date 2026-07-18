@@ -1,0 +1,852 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:is(.dark *));
+
+/* =========================================================
+   TAILWIND @theme — tokens que Tailwind expone como utilities
+   ========================================================= */
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-card-border: hsl(var(--card-border));
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-popover-border: hsl(var(--popover-border));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-primary-border: var(--primary-border);
+
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-secondary-border: var(--secondary-border);
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-muted-border: var(--muted-border);
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-accent-border: var(--accent-border);
+
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-destructive-border: var(--destructive-border);
+
+  --color-chart-1: hsl(var(--chart-1));
+  --color-chart-2: hsl(var(--chart-2));
+  --color-chart-3: hsl(var(--chart-3));
+  --color-chart-4: hsl(var(--chart-4));
+  --color-chart-5: hsl(var(--chart-5));
+
+  --font-sans: var(--app-font-sans);
+  --font-serif: var(--app-font-serif);
+  --font-mono: var(--app-font-mono);
+  --font-display: var(--app-font-display);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+/* =========================================================
+   DARK THEME  (default — imita la maqueta)
+   ========================================================= */
+.dark, :root {
+  --background: 240 12% 4%;
+  --foreground: 40 30% 92%;
+  --border: 240 6% 14%;
+
+  --card: 240 12% 7%;
+  --card-foreground: 40 30% 92%;
+  --card-border: 42 45% 32%;
+
+  --popover: 240 12% 7%;
+  --popover-foreground: 40 30% 92%;
+  --popover-border: 42 45% 32%;
+
+  --primary: 42 78% 55%;              /* dorado principal */
+  --primary-foreground: 240 12% 4%;
+
+  --secondary: 240 6% 14%;
+  --secondary-foreground: 40 30% 92%;
+
+  --muted: 240 6% 12%;
+  --muted-foreground: 40 6% 62%;
+
+  --accent: 42 60% 45%;
+  --accent-foreground: 240 12% 4%;
+
+  --destructive: 0 65% 45%;
+  --destructive-foreground: 0 0% 98%;
+
+  --input: 240 6% 16%;
+  --ring: 42 78% 55%;
+
+  /* --- Paleta dorada custom del rediseño --- */
+  --gold: 42 78% 60%;                 /* ámbar suave */
+  --gold-strong: 42 90% 68%;          /* ámbar brillante hover */
+  --gold-border: 42 45% 32%;          /* borde dorado apagado */
+  --gold-hover: 42 50% 22% / 0.4;     /* fondo hover translúcido */
+  --gold-glow: 42 100% 60% / 0.15;
+
+  /* --- Paleta morada complementaria --- */
+  --violet: 265 85% 70%;
+  --violet-strong: 275 90% 75%;
+  --violet-border: 265 40% 40%;
+  --violet-glow: 265 100% 65% / 0.18;
+
+  /* --- Coin-Frame Media Ring (imágenes reales de NFTs/tokens) --- */
+  --coin-edge: 42 55% 24%;       /* borde bronce oscuro, sombra del "canto acuñado" */
+  --coin-highlight: 45 95% 78%;  /* brillo del filo, más claro que --gold-strong */
+
+  /* --- Semánticos --- */
+  --success: 142 70% 45%;
+  --warn: 38 92% 55%;
+  --danger: 0 75% 60%;
+
+  /* --- Paleta unificada de gráficos (single source of truth) ---
+     Se consume desde ReportDashboard.tsx (DONUT_COLORS / EXPENSE_COLORS /
+     PIE_COLORS). Antes existían dos paletas separadas; ahora todos los
+     donuts/pies leen desde estas variables. */
+  --chart-defi:      265 85% 70%;   /* violeta (categoría DeFi) */
+  --chart-transfers: 42 78% 60%;    /* dorado suave (transfers) */
+  --chart-nfts:      42 90% 68%;    /* dorado brillante (NFTs) */
+  --chart-swap:      195 78% 60%;   /* cian (swaps) */
+  --chart-staking:   275 90% 75%;   /* violeta claro (staking) */
+  --chart-other:     240 6% 55%;    /* neutro (Otros, incluye dust) */
+  --chart-1: 42 78% 60%;
+  --chart-2: 265 85% 70%;
+  --chart-3: 42 90% 68%;
+  --chart-4: 195 78% 55%;
+  --chart-5: 320 55% 65%;
+
+  --app-font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --app-font-serif: Georgia, serif;
+  --app-font-mono: 'Space Mono', ui-monospace, Menlo, monospace;
+  --app-font-display: 'Fraunces', Georgia, serif;
+  --radius: 0.75rem;
+
+  --sidebar: 240 12% 7%;
+  --sidebar-foreground: 40 30% 92%;
+  --sidebar-border: 42 45% 32%;
+  --sidebar-primary: 42 78% 60%;
+  --sidebar-primary-foreground: 240 12% 4%;
+  --sidebar-accent: 240 6% 14%;
+  --sidebar-accent-foreground: 40 30% 92%;
+  --sidebar-ring: 42 78% 60%;
+  --sidebar-primary-border: hsl(var(--sidebar-primary));
+  --sidebar-accent-border: hsl(var(--sidebar-accent));
+  --primary-border: hsl(var(--primary));
+  --secondary-border: hsl(var(--secondary));
+  --muted-border: hsl(var(--muted));
+  --accent-border: hsl(var(--accent));
+  --destructive-border: hsl(var(--destructive));
+}
+
+/* =========================================================
+   LIGHT THEME
+   ========================================================= */
+:root:not(.dark) {
+  --background: 40 30% 97%;
+  --foreground: 240 10% 12%;
+  --border: 40 20% 85%;
+
+  --card: 0 0% 100%;
+  --card-foreground: 240 10% 12%;
+  --card-border: 42 60% 55%;
+
+  --popover: 0 0% 100%;
+  --popover-foreground: 240 10% 12%;
+  --popover-border: 42 60% 55%;
+
+  --primary: 42 78% 45%;
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 40 20% 90%;
+  --secondary-foreground: 240 10% 12%;
+
+  --muted: 40 20% 92%;
+  --muted-foreground: 240 5% 40%;
+
+  --accent: 42 60% 50%;
+  --accent-foreground: 0 0% 100%;
+
+  --destructive: 0 70% 50%;
+  --destructive-foreground: 0 0% 100%;
+
+  --input: 40 20% 88%;
+  --ring: 42 78% 45%;
+
+  --gold: 42 78% 45%;
+  --gold-strong: 42 90% 40%;
+  --gold-border: 42 60% 60%;
+  --gold-hover: 42 80% 90% / 0.7;
+  --gold-glow: 42 100% 50% / 0.15;
+
+  --violet: 265 85% 55%;
+  --violet-strong: 275 85% 50%;
+  --violet-border: 265 60% 65%;
+  --violet-glow: 265 100% 60% / 0.14;
+
+  --success: 142 70% 38%;
+  --warn: 38 92% 45%;
+  --danger: 0 75% 50%;
+
+  --chart-defi:      265 70% 50%;
+  --chart-transfers: 42 78% 45%;
+  --chart-nfts:      42 90% 40%;
+  --chart-swap:      195 78% 40%;
+  --chart-staking:   275 70% 55%;
+  --chart-other:     240 6% 45%;
+  --chart-1: 42 78% 45%;
+  --chart-2: 265 70% 50%;
+  --chart-3: 42 90% 40%;
+  --chart-4: 195 78% 40%;
+  --chart-5: 320 55% 50%;
+}
+
+/* =========================================================
+   BASE
+   ========================================================= */
+@layer base {
+  * { @apply border-border; }
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+    background-image:
+      radial-gradient(circle at 15% -10%, hsl(var(--gold-glow)) 0%, transparent 42%),
+      radial-gradient(circle at 90% 100%, hsl(var(--violet-glow)) 0%, transparent 38%),
+      radial-gradient(circle at 100% 20%, hsl(var(--gold-glow)) 0%, transparent 34%);
+    background-attachment: fixed;
+  }
+
+  /* Transición global al cambiar de tema */
+  html.theme-transitioning,
+  html.theme-transitioning *,
+  html.theme-transitioning *::before,
+  html.theme-transitioning *::after {
+    transition:
+      background-color 350ms ease,
+      color 350ms ease,
+      border-color 350ms ease,
+      fill 350ms ease,
+      stroke 350ms ease !important;
+  }
+}
+
+/* =========================================================
+   COMPONENT UTILITIES — clases usadas por OverviewGrid, tabs, etc.
+   ========================================================= */
+@layer components {
+
+  /* ------- Tarjeta dorada base ------- */
+  .card-gold {
+    @apply relative rounded-xl bg-[hsl(var(--card))] border shadow-lg;
+    border-color: hsl(var(--gold-border));
+    box-shadow:
+      0 1px 0 hsl(var(--gold) / 0.05) inset,
+      0 8px 24px -12px rgb(0 0 0 / 0.5);
+    transition: transform 300ms ease, box-shadow 300ms ease, border-color 300ms ease;
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-2px);
+    border-color: hsl(var(--gold));
+    box-shadow:
+      0 1px 0 hsl(var(--gold) / 0.15) inset,
+      0 20px 40px -18px hsl(var(--gold) / 0.25),
+      0 8px 24px -12px rgb(0 0 0 / 0.5);
+  }
+
+  /* ------- Título de sección con acento dorado ------- */
+  .section-title {
+    @apply text-base font-semibold tracking-tight;
+    color: hsl(var(--foreground));
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid hsl(var(--gold-border) / 0.6);
+  }
+
+  .text-gold-title {
+    background: linear-gradient(90deg, hsl(var(--gold-strong)), hsl(var(--gold)));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* ------- Tabs dorados del header ------- */
+  .tab-gold {
+    @apply inline-flex items-center rounded-md px-4 py-2 text-sm font-medium transition-all duration-200;
+    color: hsl(var(--muted-foreground));
+    background: transparent;
+    border: 1px solid transparent;
+  }
+  .tab-gold:hover {
+    color: hsl(var(--gold-strong));
+    background: hsl(var(--gold-hover));
+  }
+  .tab-gold[data-state="active"] {
+    color: hsl(var(--gold-strong));
+    background: linear-gradient(180deg, hsl(var(--gold) / 0.15), hsl(var(--gold) / 0.05));
+    border-color: hsl(var(--gold-border));
+    box-shadow: 0 0 0 1px hsl(var(--gold) / 0.2) inset, 0 8px 16px -12px hsl(var(--gold) / 0.4);
+  }
+
+  /* ------- KPI box (Total Income / Total Expenses) ------- */
+  .kpi-box {
+    @apply rounded-lg p-3;
+    background: hsl(var(--muted) / 0.4);
+    border: 1px solid hsl(var(--gold-border) / 0.5);
+    transition: border-color 200ms ease, background 200ms ease;
+  }
+  .kpi-box:hover {
+    border-color: hsl(var(--gold));
+    background: hsl(var(--muted) / 0.6);
+  }
+
+  /* ------- Rows en Recent Transactions ------- */
+  .tx-row {
+    @apply flex items-center justify-between rounded-lg p-3;
+    background: hsl(var(--muted) / 0.35);
+    border: 1px solid hsl(var(--gold-border) / 0.4);
+    animation: fadeSlideIn 400ms ease both;
+    transition: transform 200ms ease, border-color 200ms ease, background 200ms ease;
+  }
+  .tx-row:hover {
+    transform: translateX(2px);
+    border-color: hsl(var(--gold));
+    background: hsl(var(--muted) / 0.55);
+  }
+  .tx-icon {
+    @apply h-9 w-9 rounded-full flex items-center justify-center;
+    background: linear-gradient(135deg, hsl(var(--gold) / 0.25), hsl(var(--gold) / 0.05));
+    color: hsl(var(--gold-strong));
+    border: 1px solid hsl(var(--gold-border));
+  }
+
+  /* ------- NFT & token rows (Holdings) ------- */
+  .nft-row {
+    @apply flex items-center gap-3 rounded-lg p-2;
+    background: hsl(var(--muted) / 0.35);
+    border: 1px solid hsl(var(--gold-border) / 0.4);
+    transition: all 200ms ease;
+  }
+  .nft-row:hover { border-color: hsl(var(--gold)); transform: translateY(-1px); }
+
+  .token-row {
+    @apply flex items-start gap-3 rounded-lg p-3;
+    background: hsl(var(--muted) / 0.35);
+    border: 1px solid hsl(var(--gold-border) / 0.4);
+    transition: all 200ms ease;
+  }
+  .token-row:hover { border-color: hsl(var(--gold)); background: hsl(var(--muted) / 0.55); }
+  .token-icon {
+    @apply h-8 w-8 rounded-full flex items-center justify-center;
+    background: linear-gradient(135deg, hsl(var(--gold) / 0.3), hsl(var(--gold) / 0.05));
+    color: hsl(var(--gold-strong));
+  }
+
+  /* ------- Badges dorados (#04, #06...) ------- */
+  .badge-gold {
+    @apply mt-1 inline-block rounded px-1.5 py-0.5 text-[10px] font-mono font-semibold;
+    background: hsl(var(--gold) / 0.15);
+    color: hsl(var(--gold-strong));
+    border: 1px solid hsl(var(--gold-border));
+  }
+
+  /* ------- Botón CTA dorado (Generate Report) ------- */
+  .btn-gold {
+    @apply relative font-semibold text-sm;
+    color: hsl(var(--primary-foreground));
+    background: linear-gradient(135deg, hsl(var(--gold-strong)), hsl(var(--gold)));
+    border: 1px solid hsl(var(--gold-strong));
+    box-shadow:
+      0 1px 0 rgb(255 255 255 / 0.2) inset,
+      0 10px 24px -14px hsl(var(--gold) / 0.9);
+    transition: transform 200ms ease, box-shadow 200ms ease, filter 200ms ease;
+  }
+  .btn-gold:hover:not(:disabled) {
+    transform: translateY(-1px);
+    filter: brightness(1.08);
+    box-shadow:
+      0 1px 0 rgb(255 255 255 / 0.25) inset,
+      0 16px 32px -14px hsl(var(--gold) / 1);
+  }
+  .btn-gold:disabled { opacity: 0.65; cursor: not-allowed; }
+
+  /* ------- Botones de descarga ------- */
+  .btn-download-excel {
+    @apply font-medium text-sm;
+    background: hsl(142 70% 40% / 0.15);
+    color: hsl(142 70% 55%);
+    border: 1px solid hsl(142 70% 40% / 0.5);
+    transition: all 200ms ease;
+  }
+  .btn-download-excel:hover:not(:disabled) {
+    background: hsl(142 70% 40% / 0.25);
+    border-color: hsl(142 70% 55%);
+    transform: translateY(-1px);
+  }
+  .btn-download-pdf {
+    @apply font-medium text-sm;
+    background: hsl(0 70% 45% / 0.15);
+    color: hsl(0 84% 65%);
+    border: 1px solid hsl(0 70% 45% / 0.5);
+    transition: all 200ms ease;
+  }
+  .btn-download-pdf:hover:not(:disabled) {
+    background: hsl(0 70% 45% / 0.25);
+    border-color: hsl(0 84% 65%);
+    transform: translateY(-1px);
+  }
+
+  /* ------- Empty state ------- */
+  .empty-state {
+    @apply text-xs text-muted-foreground italic px-1 py-4 text-center;
+  }
+
+  /* =====================================================
+     PREMIUM SAAS ADDITIONS — glass, purple, skeleton, tables
+     ===================================================== */
+
+  /* ========== SUPERFICIES DE VIDRIO ==========
+     Una sola base (.surface-glass) para todas las tarjetas de vidrio del
+     producto. Antes había 4 casi-duplicados (.glass, .chart-card,
+     .asset-card, .card-gold) con el mismo look. Ahora todos los ajustes
+     se hacen en un solo lugar. Se conservan los alias .glass / .chart-card
+     / .asset-card por compatibilidad con el código existente. */
+  .surface-glass {
+    position: relative;
+    background:
+      linear-gradient(180deg,
+        hsl(var(--card) / 0.85),
+        hsl(var(--card) / 0.6));
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    /* Borde neutro por defecto — reservamos el dorado para elementos
+       que deben destacar (btn-gold, ScoreCard, hover states). */
+    border: 1px solid hsl(var(--border));
+    border-radius: 1rem;
+    box-shadow:
+      0 1px 0 hsl(var(--gold) / 0.05) inset,
+      0 10px 32px -18px rgb(0 0 0 / 0.55);
+    transition: border-color 300ms ease, box-shadow 300ms ease, transform 300ms ease;
+  }
+  .surface-glass:hover {
+    border-color: hsl(var(--gold) / 0.5);
+    box-shadow:
+      0 1px 0 hsl(var(--gold) / 0.15) inset,
+      0 20px 44px -20px hsl(var(--gold) / 0.22),
+      0 10px 32px -18px rgb(0 0 0 / 0.55);
+  }
+
+  /* Variante primaria — la usa únicamente el ScoreCard (pieza premium del
+     reporte). Más contraste, borde dorado marcado y un halo dorado sutil
+     detrás: es la única tarjeta que debe leerse como "la joya". */
+  .surface-glass--score {
+    border: 1px solid hsl(var(--gold-border));
+    background:
+      radial-gradient(120% 100% at 0% 0%, hsl(var(--gold) / 0.10), transparent 55%),
+      linear-gradient(180deg,
+        hsl(var(--card) / 0.92),
+        hsl(var(--card) / 0.72));
+    box-shadow:
+      0 1px 0 hsl(var(--gold) / 0.22) inset,
+      0 0 0 1px hsl(var(--gold) / 0.10),
+      0 24px 48px -22px hsl(var(--gold) / 0.35),
+      0 10px 32px -18px rgb(0 0 0 / 0.6);
+  }
+  .surface-glass--score:hover {
+    border-color: hsl(var(--gold));
+    box-shadow:
+      0 1px 0 hsl(var(--gold) / 0.28) inset,
+      0 0 0 1px hsl(var(--gold) / 0.18),
+      0 30px 60px -22px hsl(var(--gold) / 0.45),
+      0 10px 32px -18px rgb(0 0 0 / 0.6);
+  }
+
+  /* Alias legacy — .glass, .chart-card, .asset-card mantienen su nombre
+     pero heredan de .surface-glass vía @apply. Los modificadores propios
+     (padding, flex) se conservan. */
+  .glass {
+    background:
+      linear-gradient(180deg,
+        hsl(var(--card) / 0.85),
+        hsl(var(--card) / 0.6));
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    border: 1px solid hsl(var(--border));
+    border-radius: 1rem;
+    box-shadow:
+      0 1px 0 hsl(var(--gold) / 0.05) inset,
+      0 10px 32px -18px rgb(0 0 0 / 0.55);
+    transition: border-color 300ms ease, box-shadow 300ms ease, transform 300ms ease;
+  }
+  .glass:hover {
+    border-color: hsl(var(--gold) / 0.5);
+    box-shadow:
+      0 1px 0 hsl(var(--gold) / 0.15) inset,
+      0 20px 44px -20px hsl(var(--gold) / 0.22),
+      0 10px 32px -18px rgb(0 0 0 / 0.55);
+  }
+
+  /* Título de sección premium */
+  .section-heading {
+    @apply flex items-end justify-between gap-4 mb-4;
+  }
+  .section-heading .eyebrow {
+    @apply text-[11px] uppercase tracking-[0.22em] font-display font-semibold;
+    color: hsl(var(--gold));
+  }
+  .section-heading h2 {
+    @apply text-xl sm:text-2xl font-display font-semibold tracking-tight mt-1;
+    letter-spacing: -0.01em;
+  }
+  .section-heading p {
+    @apply text-xs text-muted-foreground mt-0.5;
+  }
+
+  /* Chart card — alias legacy que hereda de .surface-glass. */
+  .chart-card {
+    @apply p-5;
+    background:
+      linear-gradient(180deg,
+        hsl(var(--card) / 0.85),
+        hsl(var(--card) / 0.6));
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    border: 1px solid hsl(var(--border));
+    border-radius: 1rem;
+    box-shadow:
+      0 1px 0 hsl(var(--gold) / 0.05) inset,
+      0 10px 32px -18px rgb(0 0 0 / 0.55);
+    transition: border-color 300ms ease, box-shadow 300ms ease, transform 300ms ease;
+  }
+  .chart-card:hover {
+    border-color: hsl(var(--gold) / 0.5);
+    box-shadow:
+      0 1px 0 hsl(var(--gold) / 0.15) inset,
+      0 20px 44px -20px hsl(var(--gold) / 0.22),
+      0 10px 32px -18px rgb(0 0 0 / 0.55);
+  }
+
+  /* Skeleton loader shimmer */
+  .sk {
+    position: relative;
+    overflow: hidden;
+    background: hsl(var(--muted) / 0.4);
+    border-radius: 8px;
+  }
+  .sk::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      hsl(var(--gold) / 0.14) 50%,
+      transparent 100%);
+    animation: skShimmer 1.6s infinite;
+  }
+
+  /* Progress bar for wallet health */
+  .health-bar {
+    height: 8px;
+    border-radius: 999px;
+    background: hsl(var(--muted) / 0.5);
+    overflow: hidden;
+    border: 1px solid hsl(var(--gold-border) / 0.4);
+  }
+  .health-bar > span {
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg,
+      hsl(var(--gold-strong)),
+      hsl(var(--gold)),
+      hsl(var(--violet)));
+    box-shadow: 0 0 12px hsl(var(--gold) / 0.35);
+    transition: width 900ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .health-bar.risk > span {
+    background: linear-gradient(90deg,
+      hsl(var(--success)),
+      hsl(var(--warn)),
+      hsl(var(--danger)));
+  }
+
+  /* Botones de export secundarios */
+  .btn-export {
+    @apply inline-flex items-center gap-2 rounded-lg px-4 h-10 text-sm font-semibold transition-all;
+    border: 1px solid hsl(var(--gold-border));
+    background: hsl(var(--card) / 0.7);
+    color: hsl(var(--foreground));
+  }
+  .btn-export:hover {
+    border-color: hsl(var(--gold));
+    background: hsl(var(--gold-hover));
+    transform: translateY(-1px);
+  }
+
+  /* Badge para el estado tx */
+  .badge-status {
+    @apply inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider;
+  }
+  .badge-status.success {
+    background: hsl(var(--success) / 0.15);
+    color: hsl(var(--success));
+    border: 1px solid hsl(var(--success) / 0.35);
+  }
+  .badge-status.failed {
+    background: hsl(var(--danger) / 0.15);
+    color: hsl(var(--danger));
+    border: 1px solid hsl(var(--danger) / 0.35);
+  }
+
+  /* Portfolio card variant — alias legacy que hereda de .surface-glass. */
+  .asset-card {
+    @apply p-5 flex flex-col gap-3;
+    background:
+      linear-gradient(180deg,
+        hsl(var(--card) / 0.85),
+        hsl(var(--card) / 0.6));
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    border: 1px solid hsl(var(--border));
+    border-radius: 1rem;
+    box-shadow:
+      0 1px 0 hsl(var(--gold) / 0.05) inset,
+      0 10px 32px -18px rgb(0 0 0 / 0.55);
+    transition: border-color 300ms ease, box-shadow 300ms ease, transform 300ms ease;
+  }
+  .asset-card:hover {
+    transform: translateY(-3px);
+    border-color: hsl(var(--gold) / 0.5);
+    box-shadow:
+      0 1px 0 hsl(var(--gold) / 0.15) inset,
+      0 20px 44px -20px hsl(var(--gold) / 0.22),
+      0 10px 32px -18px rgb(0 0 0 / 0.55);
+  }
+
+  /* Coin-Frame Media Ring: marco tipo "canto de moneda acuñada" que
+     envuelve toda imagen real de NFT/token (ver CoinFrameImage.tsx). */
+  .coin-frame {
+    position: relative;
+    padding: 3px;
+    background: repeating-conic-gradient(
+      hsl(var(--gold-strong)) 0deg 4deg,
+      hsl(var(--coin-edge)) 4deg 8deg
+    );
+    box-shadow: 0 0 14px hsl(var(--gold) / 0.25);
+    transition: filter 300ms ease, box-shadow 300ms ease;
+  }
+  .coin-frame.tarnished {
+    filter: grayscale(0.65) brightness(0.72);
+    box-shadow: none;
+  }
+  .coin-frame-inner {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 1 / 1;
+    background: hsl(var(--muted) / 0.4);
+  }
+
+  /* Purple accent utility */
+  .text-violet-title {
+    background: linear-gradient(90deg, hsl(var(--violet-strong)), hsl(var(--violet)));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Modern table hover */
+  .tx-table tbody tr {
+    transition: background 180ms ease, transform 180ms ease;
+  }
+  .tx-table tbody tr:hover {
+    background: hsl(var(--gold-hover));
+  }
+}
+
+@keyframes skShimmer {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sk::after {
+    animation: none;
+  }
+  .coin-frame,
+  .coin-frame-inner img {
+    transition: none !important;
+  }
+}
+
+/* =========================================================
+   KEYFRAMES
+   ========================================================= */
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes goldPulse {
+  0%, 100% { box-shadow: 0 0 0 0 hsl(var(--gold) / 0.4); }
+  50%      { box-shadow: 0 0 0 8px hsl(var(--gold) / 0); }
+}
+
+/* Recharts tooltip: que respete el tema */
+.recharts-default-tooltip {
+  background: hsl(var(--card)) !important;
+  border: 1px solid hsl(var(--gold-border)) !important;
+  border-radius: 0.5rem !important;
+  color: hsl(var(--foreground)) !important;
+}
+
+/* =========================================================
+   Scrollbar dorado (columnas del OverviewGrid)
+   ========================================================= */
+.tx-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--gold-border)) transparent;
+}
+.tx-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+.tx-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.tx-scroll::-webkit-scrollbar-thumb {
+  background-color: hsl(var(--gold-border));
+  border-radius: 3px;
+}
+.tx-scroll::-webkit-scrollbar-thumb:hover {
+  background-color: hsl(var(--gold));
+}
+
+/* =========================================================
+   Scope del AnnualReportDashboard — suaviza los estilos
+   originales del componente para que respire dentro de la
+   tarjeta central sin conflictos.
+   ========================================================= */
+.annual-report-scope > * {
+  animation: fadeSlideIn 500ms ease both;
+}
+.annual-report-scope button[class*="bg-primary"] {
+  background: linear-gradient(135deg, hsl(var(--gold-strong)), hsl(var(--gold))) !important;
+  color: hsl(var(--primary-foreground)) !important;
+  border-color: hsl(var(--gold-strong)) !important;
+  box-shadow:
+    0 1px 0 rgb(255 255 255 / 0.2) inset,
+    0 10px 24px -14px hsl(var(--gold) / 0.9);
+  transition: transform 200ms ease, filter 200ms ease;
+}
+.annual-report-scope button[class*="bg-primary"]:hover:not(:disabled) {
+  transform: translateY(-1px);
+  filter: brightness(1.08);
+}
+
+/* Focus rings dorados */
+:focus-visible {
+  outline: 2px solid hsl(var(--gold));
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* =========================================================
+   LANDING PAGE — hero visuals, ticker, bento, proof terminal
+   (basado en la maqueta de rediseño)
+   ========================================================= */
+.landing-bg-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(hsl(var(--gold) / 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, hsl(var(--gold) / 0.06) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(ellipse 100% 80% at 50% 20%, black 30%, transparent 75%);
+  mask-image: radial-gradient(ellipse 100% 80% at 50% 20%, black 30%, transparent 75%);
+  pointer-events: none;
+}
+
+.landing-float-card {
+  position: absolute;
+  border-radius: 1rem;
+  padding: 0.85rem 1rem;
+  background: linear-gradient(180deg, hsl(var(--card) / 0.92), hsl(var(--card) / 0.75));
+  border: 1px solid hsl(var(--gold-border));
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  box-shadow: 0 1px 0 hsl(var(--gold) / 0.1) inset, 0 20px 40px -18px rgb(0 0 0 / 0.6);
+  animation: floatY 6s ease-in-out infinite;
+}
+
+@keyframes floatY {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marqueeScroll 28s linear infinite;
+}
+@keyframes marqueeScroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.mini-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 5px;
+  height: 64px;
+}
+.mini-bars span {
+  flex: 1;
+  height: var(--h);
+  border-radius: 3px 3px 0 0;
+  background: linear-gradient(180deg, hsl(var(--gold)), hsl(var(--gold) / 0.25));
+}
+
+.proof-terminal {
+  border-radius: 1rem;
+  overflow: hidden;
+  border: 1px solid hsl(var(--gold-border));
+  background: hsl(var(--card) / 0.9);
+  box-shadow: 0 1px 0 hsl(var(--gold) / 0.08) inset, 0 24px 48px -24px rgb(0 0 0 / 0.6);
+}
+.proof-terminal-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-bottom: 1px solid hsl(var(--gold-border) / 0.6);
+  background: hsl(var(--muted) / 0.4);
+}
+.proof-dot { width: 9px; height: 9px; border-radius: 50%; background: hsl(var(--danger)); }
+.proof-dot.amber { background: hsl(var(--warn)); }
+.proof-dot.green { background: hsl(var(--success)); }
+.proof-terminal pre {
+  margin: 0;
+  padding: 18px 20px;
+  font-family: var(--app-font-mono);
+  font-size: 12.5px;
+  line-height: 1.75;
+  overflow-x: auto;
+  white-space: pre;
+}
+.pt-com { color: hsl(var(--muted-foreground)); }
+.pt-key { color: hsl(var(--violet)); }
+.pt-fn  { color: hsl(var(--gold)); }
+.pt-typ { color: hsl(142 70% 55%); }
