@@ -119,14 +119,10 @@ function readProvider(): ApiProvider {
   }
 }
 
-// Etherscan API key used for every request this app makes (Etherscan V2,
-// multichain via `chainid`, including Monad). This replaces the old
-// 'YourApiKeyToken' V1 placeholder, which Etherscan's V2 endpoint rejects
-// outright and was the root cause of every metric silently rendering as 0
-// (see CAMBIOS-2.md). There is intentionally no settings UI to override
-// this — the key is baked in so the report works out of the box for
-// everyone.
-const INTERNAL_ETHERSCAN_KEY = '1A7HXC739JP1JKK7ZJER2T36AEXCY1IUIH';
+// Etherscan V2 requests are proxied through the Vercel API Route at
+// /api/etherscan. The server route injects ETHERSCAN_API_KEY, so the key
+// never reaches the browser bundle.
+const ETHERSCAN_API_ROUTE = '/api/etherscan';
 
 // ==============================================================
 //  ETHERSCAN V2 fetcher (multichain via chainid parameter)
@@ -136,9 +132,11 @@ async function fetchEtherscanV2(
   chainId: number,
   params: Record<string, string>
 ): Promise<any[]> {
-  const url = new URL('https://api.etherscan.io/v2/api');
+  const url = new URL(ETHERSCAN_API_ROUTE, window.location.origin);
   url.searchParams.set('chainid', String(chainId));
-  Object.entries(params).forEach(([k, v]) => url.searchParams.append(k, v));
+  Object.entries(params).forEach(([k, v]) => {
+    if (k !== 'apikey') url.searchParams.append(k, v);
+  });
 
   const res = await fetch(url.toString());
   const data = await res.json();
@@ -407,8 +405,7 @@ async function fetchTxs(
     address,
     startblock: '0',
     endblock: '99999999',
-    sort: 'desc',
-    apikey: INTERNAL_ETHERSCAN_KEY
+    sort: 'desc'
   }) as MonadScanTx[];
   // No client-side re-sort needed: the API already returns sort=desc and
   // each page is appended in order.
@@ -448,8 +445,7 @@ async function fetchInternalTxs(
     address,
     startblock: '0',
     endblock: '99999999',
-    sort: 'desc',
-    apikey: INTERNAL_ETHERSCAN_KEY
+    sort: 'desc'
   });
   // Normalize into the same MonadScanTx shape the rest of the app expects.
   // Internal calls don't pay their own gas (the parent top-level tx —
@@ -496,8 +492,7 @@ async function fetchTokenTxs(
     address,
     startblock: '0',
     endblock: '99999999',
-    sort: 'desc',
-    apikey: INTERNAL_ETHERSCAN_KEY
+    sort: 'desc'
   }) as MonadScanTokenTx[];
   return result;
 }
@@ -523,8 +518,7 @@ async function fetchNftTxs(
     address,
     startblock: '0',
     endblock: '99999999',
-    sort: 'desc',
-    apikey: INTERNAL_ETHERSCAN_KEY
+    sort: 'desc'
   }) as MonadScanNftTx[];
   return result;
 }
@@ -534,28 +528,10 @@ async function fetchNftTxs(
 // ==============================================================
 
 /*
- * NOTE on `enabled`:
- * These queries used to gate on a local `hasKey = !!apiKey || provider ===
- * 'etherscan'` flag, on the assumption that Etherscan V2 "works with a
- * public fallback" even with no user key. That fallback key
- * (the old 'YourApiKeyToken' placeholder) was a leftover from the old V1
- * API and Etherscan's V2 endpoint rejects it outright — so every one of
- * these calls was throwing, but because the query was still marked
- * `enabled`, `data` just came back `undefined` and every downstream metric
- * silently rendered as 0 with no visible error anywhere (income, expenses,
- * transaction count, gas spent, wallet age — all zero, even though the
- * live on-chain balance shown elsewhere, which is read directly via the
- * wallet's own RPC provider and never touches this API, was correct).
- *
- * That placeholder has since been replaced with a real, working, hardcoded
- * key (INTERNAL_ETHERSCAN_KEY above), so this no longer happens — there is
- * no user-facing API key setting anymore, the app just works.
- *
- * We always enable the query once a wallet is connected and let the fetch
- * function itself throw a descriptive error on genuine failures (network
- * issues, rate limits, etc.) so `isError`/`error` are populated and the UI
- * (see ReportDashboard's data-unavailable banner) can tell the person
- * something went wrong instead of just showing zeros.
+ * The Etherscan API key is intentionally not read by the browser.
+ * All Etherscan requests go through the Vercel API Route at /api/etherscan.
+ * This keeps ETHERSCAN_API_KEY server-side while preserving the existing
+ * React Query data layer and UI.
  */
 
 export function useTransactions() {
